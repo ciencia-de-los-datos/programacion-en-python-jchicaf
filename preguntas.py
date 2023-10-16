@@ -472,27 +472,27 @@ def pregunta_12():
     }
 
     """
-    
     import csv
-    with open('data.csv', newline='') as csvfile:
-        csvreader = csv.reader(csvfile, delimiter='\t')
+    suma_por_columna1 = {}
 
-    suma_columna_5 = {}
+    # Abrir el archivo CSV en modo lectura
+    with open('data.csv', 'r', newline='') as archivo_csv:
+        lector_csv = csv.reader(archivo_csv, delimiter='\t')
 
-    for row in csvreader:
-            letra_columna_1 = row[0]
-            column_5 = row[4].split(',')
+        # Iterar sobre cada fila en el archivo CSV
+        for fila in lector_csv:
+            # Asegurarse de que la fila tenga al menos 5 elementos (columna 5)
+            if len(fila) >= 5:
+                valores_col5 = fila[4].split(',')
+                for valor_col5 in valores_col5:
+                    # Obtener el valor y la clave (columna 1)
+                    clave_col1 = fila[0].strip()
+                    valor_col5 = int(valor_col5.split(':')[1])
+                    
+                    # Sumar el valor de la columna 5 para la clave de la columna 1
+                    suma_por_columna1[clave_col1] = suma_por_columna1.get(clave_col1, 0) + valor_col5
 
-            for entry in column_5:
-                _, valor = entry.split(':')
-                valor = int(valor)
+                    # Ordenar el diccionario por las claves (letras de la columna 4)
+                    suma_por_columna1 = {k: suma_por_columna1[k] for k in sorted(suma_por_columna1)}
 
-                if letra_columna_1 in suma_columna_5:
-                    suma_columna_5[letra_columna_1] += valor
-                else:
-                    suma_columna_5[letra_columna_1] = valor
-
-    # Ordenar el diccionario
-    respuesta = dict(sorted(suma_columna_5.items()))
-
-    return respuesta
+    return suma_por_columna1
